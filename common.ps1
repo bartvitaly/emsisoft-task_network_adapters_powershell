@@ -2,22 +2,24 @@
 function GetEnabledNetDevices {
     try
     {
-        return Get-Pnpdevice -Class 'Net' -PresentOnly -Status OK
+        $res = Get-Pnpdevice -Class 'Net' -PresentOnly -Status OK -ErrorAction Stop
+        return $res
     }
     catch
     {
-        Write-Host 'Error when retreiving the list of devices'
+        Write-Host 'Error when retrieving the list of devices. Probable reason: all devices are disabled.'
     }
 }
 
 function GetAllNetDevices {
     try
     {
-        return (Get-Pnpdevice -Class 'Net')
+        $res = Get-Pnpdevice -Class 'Net' -ErrorAction Stop
+        return $res
     }
     catch
     {
-        Write-Host 'Error when retreiving the list of devices'
+        Write-Host 'Error when retrieving the list of devices. Probable reason: all devices are disabled.'
     }
 }
 
