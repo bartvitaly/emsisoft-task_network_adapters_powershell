@@ -9,13 +9,13 @@ for($i=0; $i -le $max; $i++)
 {
     $device = [String]$devices[$i]
     Enable-PnpDevice -InstanceId $device -Confirm:$False
-    $res = CheckStatus $devices[$i] OK
+    $res = CheckStatus $device OK
     if ($res)
     {
-        Write-Host 'Device:', $devices[$i], 'is enabled.'
+        Write-Host 'Device:', $device, 'is enabled.'
     }
     else 
     {
-        Write-Host 'Device:', $devices[$i], 'was not enabled!'
+        Write-Host 'Device:', $device, 'was not enabled!'
     }
 }
