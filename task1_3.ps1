@@ -3,7 +3,7 @@ Import-Module $PSScriptRoot\common.ps1
 
 $enabledDevices = GetEnabledNetDevices
 $max = $enabledDevices.Count - 1
-$result = @([void]$max)
+[System.Collections.ArrayList]$result = @()
 
 # disable enabled adapters
 for($i=0; $i -le $max; $i++)
@@ -13,12 +13,12 @@ for($i=0; $i -le $max; $i++)
     $res = CheckStatus $device OK
     if ($res)
     {
-        Write-Host 'Device ' + $enabledDevices[$i].Name ' was not disabled!'    
+        Write-Host 'Device:', $enabledDevices[$i].Name, 'was not disabled!'    
     }
     else
     {
-        Write-Host 'Device: ', $enabledDevices[$i].Name, ' is disabled.'
-        [void]$result.add($device)
+        Write-Host 'Device:', $enabledDevices[$i].Name, 'is disabled.'
+        [void]$result.Add($device)
     }
 }
 
