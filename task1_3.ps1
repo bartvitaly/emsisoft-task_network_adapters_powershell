@@ -8,9 +8,8 @@ $max = $enabledDevices.Count - 1
 # disable enabled adapters
 for($i=0; $i -le $max; $i++)
 {
-    $device = $enabledDevices[$i].InstanceId
-    Disable-PnpDevice -InstanceId $device -Confirm:$False
-    $res = CheckStatus $device OK
+    $InstanceId = $enabledDevices[$i].InstanceId
+    $res = DisableDevice($InstanceId)
     if ($res)
     {
         Write-Host 'Device:', $enabledDevices[$i].Name, 'was not disabled!'    
@@ -18,8 +17,12 @@ for($i=0; $i -le $max; $i++)
     else
     {
         Write-Host 'Device:', $enabledDevices[$i].Name, 'is disabled.'
-        [void]$result.Add($device)
+        [void]$result.Add($InstanceId)
     }
 }
 
-$result | Out-File -FilePath $PSScriptRoot\disabled_adapters.txt
+# Write to file if there are disabled devices
+if ($result.Count -gt 1)
+{
+    $result | Out-File -FilePath $PSScriptRoot\disabled_adapters.txt
+}

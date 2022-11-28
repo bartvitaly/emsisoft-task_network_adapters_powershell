@@ -1,4 +1,6 @@
-﻿# get list of all enabled network adapters
+﻿$DeviceActionTimeout = 10
+
+# get list of all enabled network adapters
 function GetEnabledNetDevices {
     try
     {
@@ -23,6 +25,53 @@ function GetAllNetDevices {
     }
 }
 
+function DisableDevice($instanceId)
+{
+    for ($i=0; $i -le 3; $i++)
+    {
+        try
+        {
+            Disable-PnpDevice -InstanceId $instanceId -Confirm:$false
+        }
+        catch {
+            Write-Host 'Error when when disabling device.'
+        }
+        $res = CheckStatus $instanceId OK
+        if ($res -eq $true) {
+            Write-Host 'Device was not disabled, trying again.'
+            Start-Sleep -Seconds $DeviceActionTimeout
+        }
+        else 
+        {
+            return $res
+        }
+    }
+    return $res
+}
+
+function EnableDevice($instanceId)
+{
+    for ($i=0; $i -le 3; $i++)
+    {
+        try
+        {
+            Enable-PnpDevice -InstanceId $instanceId -Confirm:$False
+        }
+        catch {
+            Write-Host 'Error when when enabling device.'
+        }
+        $res = CheckStatus $instanceId OK
+        if ($res -eq $false) {
+            Write-Host 'Device was not enabled, trying again.'
+            Start-Sleep -Seconds $DeviceActionTimeout
+        }
+        else
+        {
+            return $res        
+        }
+    }
+    return $res
+}
 function CheckStatus($instanceId, $statusExpected)
 {
     $statusActual = (Get-Pnpdevice -Class 'Net' -PresentOnly -InstanceId $instanceId).Status
