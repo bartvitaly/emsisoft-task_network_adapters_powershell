@@ -20,13 +20,13 @@ function DisableDevice($device)
         catch {
             Write-Host 'Error when when disabling device.'
         }
-        $status = (Get-NetAdapter $device.Name).Status
-        if ($res -eq 'Disabled') {
-            return $res
+        $status = (Get-NetAdapter -Name $device.Name).Status
+        if ([String]$status -eq 'Disabled') {
+            return $status
         }
         else 
         {
-            Write-Host 'Device was not disabled, trying again.'
+            Write-Host "Device was not disabled, current status: $status. Trying again..."
             Start-Sleep -Seconds $DeviceActionTimeout
         }
     }
@@ -45,8 +45,8 @@ function EnableDevice($name)
             Write-Host 'Error when when enabling device.'
         }
         $status = (Get-NetAdapter $name).Status
-        if ($status -eq 'Up') {
-            Write-Host 'Device was not enabled. Trying again...'
+        if ([String]$status -ne 'Up') {
+            Write-Host "Device was not enabled, current status: '$status'. Trying again..."
             Start-Sleep -Seconds $DeviceActionTimeout
         }
         else
