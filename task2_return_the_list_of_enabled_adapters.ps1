@@ -3,13 +3,14 @@
 Import-Module $PSScriptRoot\common.ps1
 
 $devices = GetEnabledNetDevices
-$max = $devices.Count - 1
+$i = 0
 [System.Collections.ArrayList]$result = @()
 
 # return Index and Name of all enabled adapters
-for($i=0; $i -le $max; $i++)
+foreach($device in $devices)
 {
-  [void]$result.Add([String]$i + ' ' + $devices[$i].Name)
+    [void]$result.Add([String]$i + ' ' + $device.Name)
+    $i++
 }
 
 return $result
