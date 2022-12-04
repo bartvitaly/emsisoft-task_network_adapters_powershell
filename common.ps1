@@ -18,7 +18,7 @@ function DisableDevice($device)
             Disable-NetAdapter $device.Name -Confirm:$False
         }
         catch {
-            Write-Host 'Error when when disabling device.'
+            Write-Host 'Error when disabling device.'
         }
         $status = (Get-NetAdapter -Name $device.Name).Status
         if ([String]$status -eq 'Disabled') {
@@ -35,6 +35,7 @@ function DisableDevice($device)
 
 function EnableDevice($name)
 {
+    $res = $false
     for ($i=0; $i -le 3; $i++)
     {
         try
@@ -42,7 +43,7 @@ function EnableDevice($name)
             Enable-NetAdapter $name -Confirm:$False
         }
         catch {
-            Write-Host 'Error when when enabling device.'
+            Write-Host 'Error when enabling device.'
         }
         $status = (Get-NetAdapter $name).Status
         if ([String]$status -ne 'Up') {
@@ -51,7 +52,7 @@ function EnableDevice($name)
         }
         else
         {
-            return $res        
+            return $true        
         }
     }
     return $res
