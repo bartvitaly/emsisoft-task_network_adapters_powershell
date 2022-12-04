@@ -35,7 +35,6 @@ function DisableDevice($device)
 
 function EnableDevice($name)
 {
-    $res = $false
     for ($i=0; $i -le 3; $i++)
     {
         try
@@ -55,7 +54,7 @@ function EnableDevice($name)
             return $true        
         }
     }
-    return $res
+    return $false
 }
 function CheckStatus($name, $statusExpected)
 {
